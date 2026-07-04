@@ -34,17 +34,17 @@ The technical optimization of sequential model sharding has transitioned from ba
 
 Pipeline Parallelism configurations are strictly categorized based on the exact sequencing rules that govern micro-batch forward and backward passes.
 
-### A. GPipe Schedule (Fill-Drain Pipelining)
-*   **Mechanism:** Processes all $M$ forward micro-batches continuously across the pipeline cards before initiating any backward pass calculations globally.
-*   **Cons:** Peak activation memory footprints scale linearly with the number of micro-batches ($O(M)$), requiring aggressive activation checkpointing to prevent VRAM exhaustion.
+- ### A. GPipe Schedule (Fill-Drain Pipelining)
+	*   **Mechanism:** Processes all $M$ forward micro-batches continuously across the pipeline cards before initiating any backward pass calculations globally.
+	*   **Cons:** Peak activation memory footprints scale linearly with the number of micro-batches ($O(M)$), requiring aggressive activation checkpointing to prevent VRAM exhaustion.
 
-### B. 1F1B Schedule (One Forward, One Backward)
-*   **Mechanism:** Enforces a strict steady-state memory balance. Once a node's pipeline depth is fully saturated, it executes a single forward pass over micro-batch $i$ and immediately schedules a backward pass over micro-batch $i-k$.
-*   **Pros:** Caps peak activation memory utilization to a fixed boundary determined purely by pipeline depth, fully independent of the total number of micro-batches.
+- ### B. 1F1B Schedule (One Forward, One Backward)
+	*   **Mechanism:** Enforces a strict steady-state memory balance. Once a node's pipeline depth is fully saturated, it executes a single forward pass over micro-batch $i$ and immediately schedules a backward pass over micro-batch $i-k$.
+	*   **Pros:** Caps peak activation memory utilization to a fixed boundary determined purely by pipeline depth, fully independent of the total number of micro-batches.
 
-### C. Interleaved 1F1B Schedule
-*   **Mechanism:** Sub-divides each physical GPU process into multiple virtual stages. Each card holds non-contiguous blocks of layers across the global network graph, executing multi-threaded concurrent micro-batch tracking loops.
-*   **Pros:** Slashed bubble overhead dramatically, but requires exceptionally high inter-node communication networks to manage fast tensor swapping.
+- ### C. Interleaved 1F1B Schedule
+	*   **Mechanism:** Sub-divides each physical GPU process into multiple virtual stages. Each card holds non-contiguous blocks of layers across the global network graph, executing multi-threaded concurrent micro-batch tracking loops.
+	*   **Pros:** Slashed bubble overhead dramatically, but requires exceptionally high inter-node communication networks to manage fast tensor swapping.
 
 ---
 
