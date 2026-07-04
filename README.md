@@ -12,7 +12,11 @@ Instead of waiting for an entire batch to complete a massive node-to-node forwar
 The technical optimization of sequential model sharding has transitioned from basic layer cuts to automated bubble scheduling, interleaved configurations, and modern zero-bubble weight-offloading setups.
 
 ```mermaid
-[Naive Layer Splitting (2014-2016)] ───> [Synchronous 1F1B (GPipe, 2019)] ───> [Interleaved 1F1B (Megatron-LM, 2021)] ───> [Zero-Bubble PP / Offload (2024+)](100% Inter-Node Hardware Stalls)          (Symmetric Bounded Micro-Batch Bubbles)       (Interleaved Layer Chunks / Bubble Slashed)       (Asynchronous Activation Offloading Loops)
+flowchart LR
+    A["Naive Layer Splitting (2014–2016)<br/>(Large Pipeline Bubbles & Idle GPUs)"]
+    --> B["GPipe (2019)<br/>(Synchronous Micro-Batch Pipeline Parallelism)"]
+    --> C["Interleaved 1F1B (Megatron-LM, 2021)<br/>(Interleaved Scheduling with Reduced Pipeline Bubbles)"]
+    --> D["Zero-Bubble & Offloaded Pipeline Parallelism (2024+)<br/>(Near-Zero Pipeline Bubbles & Asynchronous Offloading)"]
 ```
 
 *   **The Naive Model-Parallel Era (Traditional ML, Pre-2019)**
@@ -53,7 +57,22 @@ Pipeline Parallelism configurations are strictly categorized based on the exact 
 To synchronize layer parameters across disjointed hardware nodes seamlessly, pipeline clusters execute asynchronous peer-to-peer communication swaps.
 
 ```mermaid
-Interleaved 1F1B Execution GridMicro-Batches (1, 2, 3, 4...) ───>GPU 0: │ F₁ │ F₂ │ F₃ │ F₄ │ B₁ │ B₂ │ B₃ │ B₄ │ ───┐GPU 1: │ ░  │ F₁ │ F₂ │ F₃ │ F₄ │ B₁ │ B₂ │ B₃ │ B₄ │ ├──> [P2P Tensor Communication via NCCL]GPU 2: │ ░  │ ░  │ F₁ │ F₂ │ F₃ │ F₄ │ B₁ │ B₂ │ B₃ │ B₄ │└──────────────────────────────────────────────┘░ = Pipeline Bubble (Idle Hardware Stalls)
+flowchart TB
+
+subgraph P["Interleaved 1F1B Pipeline Execution"]
+    A["Micro-Batches (1, 2, 3, 4, …)"]
+
+    A --> G0["GPU 0<br/>F₁ → F₂ → F₃ → F₄<br/>B₁ → B₂ → B₃ → B₄"]
+
+    G0 --> G1["GPU 1<br/>Bubble → F₁ → F₂ → F₃ → F₄<br/>B₁ → B₂ → B₃ → B₄"]
+
+    G1 --> G2["GPU 2<br/>Bubble → Bubble → F₁ → F₂ → F₃ → F₄<br/>B₁ → B₂ → B₃ → B₄"]
+
+    G2 --> C["NCCL Peer-to-Peer Tensor Communication"]
+end
+
+N["Bubble = Pipeline Stall (Idle Hardware)"] -.-> G1
+N -.-> G2
 ```
 
 *   **Peer-to-Peer (P2P) Communication Primitives**
