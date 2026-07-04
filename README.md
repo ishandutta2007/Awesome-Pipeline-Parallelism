@@ -125,3 +125,14 @@ Before updating this documentation repository layout, let me know how you would 
 * I can generate a **Markdown matrix table** tracking the explicit pipeline stages, tensor parallel scales, and micro-batch counts utilized by leading foundation repositories to train state-of-the-art models.
 * I can write a detailed technical explanation focusing on the **mathematics of Pipeline Bubble Size Calculation** ($F_{\text{bubble}}$) and how interleaving parameters mathematically alters cluster convergence metrics.
 
+
+##  Star History
+<div align="center">
+<a href="https://www.star-history.com/?repos=ishandutta2007/Awesome-Pipeline-Parallelism&type=date&legend=bottom-right">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ishandutta2007/Awesome-Pipeline-Parallelism&type=date&theme=dark&legend=bottom-right" />
+<source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ishandutta2007/Awesome-Pipeline-Parallelism&type=date&legend=bottom-right" />
+<img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ishandutta2007/Awesome-Pipeline-Parallelism&type=date&legend=bottom-right" />
+</picture>
+</a>
+</div>
