@@ -1,5 +1,7 @@
-# Awesome-Pipeline-Parallelism
-## Pipeline Parallelism in AI: History, Progression, Variants, & Applications
+![Banner](assets/banner.svg)
+
+# 🚀 Awesome-Pipeline-Parallelism
+## 🧠 Pipeline Parallelism in AI: History, Progression, Variants, & Applications
 
 Pipeline Parallelism (PP) is a foundational distributed model-parallel hardware architecture designed to shard large-scale deep learning networks across multiple computing nodes (GPUs/TPUs). When an artificial intelligence architecture’s parameter scale is too massive to fit within the physical Video RAM (VRAM) boundary of a single standalone GPU, Pipeline Parallelism cuts the model's structural layer blocks sequentially into independent partitions distributed across a linear array of devices. 
 
@@ -7,7 +9,7 @@ Instead of waiting for an entire batch to complete a massive node-to-node forwar
 
 ---
 
-## 1. The Macro Chronological Evolution
+## 📈 1. The Macro Chronological Evolution
 
 The technical optimization of sequential model sharding has transitioned from basic layer cuts to automated bubble scheduling, interleaved configurations, and modern zero-bubble weight-offloading setups.
 
@@ -28,7 +30,7 @@ flowchart LR
 
 ---
 
-## 2. Core Scheduling & Architectural Variants
+## ⚙️ 2. Core Scheduling & Architectural Variants
 
 Pipeline Parallelism configurations are strictly categorized based on the exact sequencing rules that govern micro-batch forward and backward passes.
 
@@ -40,7 +42,7 @@ Pipeline Parallelism configurations are strictly categorized based on the exact 
 
 ---
 
-## 3. The Pipelined Communication & Bubble Matrix
+## 🌐 3. The Pipelined Communication & Bubble Matrix
 
 To synchronize layer parameters across disjointed hardware nodes seamlessly, pipeline clusters execute asynchronous peer-to-peer communication swaps.
 
@@ -70,7 +72,7 @@ N -.-> G2
 
 ---
 
-## 4. Production Engineering Challenges & Hardware Solutions
+## 🛠️ 4. Production Engineering Challenges & Hardware Solutions
 
 Deploying variable-length pipeline parallel splits across massive enterprise cluster configurations introduces intense load-balancing and synchronization constraints.
 
@@ -81,7 +83,7 @@ Deploying variable-length pipeline parallel splits across massive enterprise clu
 
 ---
 
-## 5. Frontier Real-World AI Industrial Applications
+## 🏭 5. Frontier Real-World AI Industrial Applications
 
 | Application | Profile / Significance | First Used (Year) | Original Paper Link |
 | :--- | :--- | :--- | :--- |
@@ -91,7 +93,7 @@ Deploying variable-length pipeline parallel splits across massive enterprise clu
 
 ---
 
-## References
+## 📚 References
 1. Huang, Y., et al. (2019). GPipe: Efficient training of giant neural networks using pipeline parallelism. *Advances in Neural Information Processing Systems (NeurIPS)*, 32.
 2. Narayanan, D., et al. (2019). PipeDream: Generalized pipeline parallelism for DNN training. *Proceedings of the 27th ACM Symposium on Operating Systems Principles*.
 3. Shoeybi, M., et al. (2019). Megatron-LM: Training multi-billion parameter language models using model parallelism. *arXiv preprint arXiv:1909.08053*.
